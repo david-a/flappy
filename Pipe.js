@@ -15,8 +15,11 @@ class Pipe {
   }
 
   show() {
+    push();
+    noStroke();
     fill(0, 204, 0);
     rect(this.x, this.topY, this.width, this.height);
+    pop();
   }
 
   update() {
@@ -25,13 +28,13 @@ class Pipe {
 
   colided(plyr) {
     if (
-      plyr.x + plyr.radius > this.x &&
-      plyr.x - plyr.radius < this.x + this.width
+      plyr.x + plyr.radiusX > this.x &&
+      plyr.x - plyr.radiusX < this.x + this.width
     ) {
-      if (!this.isTop && plyr.y + plyr.radius >= this.topY) {
+      if (!this.isTop && plyr.y + plyr.radiusY >= this.topY) {
         return true;
       }
-      if (this.isTop && plyr.y - plyr.radius <= this.bottomY) {
+      if (this.isTop && plyr.y - plyr.radiusY <= this.bottomY) {
         return true;
       }
     }

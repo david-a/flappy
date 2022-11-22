@@ -1,4 +1,4 @@
-const panSpeed = 5;
+const panSpeed = 4;
 const gravity = 2;
 const pipeWidth = 100;
 const verticalGap = 200;
@@ -12,8 +12,11 @@ let pipePairs;
 let state = "pending"; // 'pending' | 'play' | 'failed'
 let starting;
 
+let birdSprite;
+const birdSpriteRadiusX = 26;
+const birdSpriteRadiusY = 18;
+
 const maxPipes = (3 * canvasWidth) / (pipeWidth + horizontalGap);
-console.log("maxPipes", maxPipes);
 function currentPipePair() {
   return pipePairs[pipeIndex];
 }
@@ -26,13 +29,23 @@ function addPipePair() {
 }
 
 function reset() {
-  player = new Player(100, canvasHeight / 2);
+  player = new Player(
+    100,
+    canvasHeight / 2,
+    birdSpriteRadiusX,
+    birdSpriteRadiusY,
+    birdSprite
+  );
   score = new Score();
   pipePairs = [];
   addPipePair();
   state = "pending";
   draw();
   noLoop();
+}
+
+function preload() {
+  birdSprite = loadImage("./assets/images/bird.png");
 }
 
 function setup() {

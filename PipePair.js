@@ -24,8 +24,11 @@ class PipePair {
   }
 
   justPassed(plyr) {
+    const backOfPlayer = plyr.x - plyr.radiusX;
+    const normalizedBackOfPlayer = backOfPlayer - (backOfPlayer % panSpeed);
+
     return (
-      plyr.x - plyr.radius ===
+      normalizedBackOfPlayer ===
       this.bottomPipe.x + this.bottomPipe.width + panSpeed
     );
   }

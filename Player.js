@@ -1,10 +1,15 @@
 class Player {
-  constructor(x, y) {
+  constructor(x, y, radiusX = 25, radiusY = 25, sprite = null) {
+    this.sprite = sprite;
     this.x = x;
     this.y = y;
     this.velY = 0;
     this.velX = panSpeed;
-    this.radius = 25;
+    this.minVelY = -25;
+    this.maxVelY = 25;
+    this.radiusX = radiusX;
+    this.radiusY = radiusY;
+
     this.colors = {
       play: [255, 255, 0],
       failed: [255, 0, 0],
@@ -13,14 +18,31 @@ class Player {
   }
 
   show(state = "play") {
-    noStroke();
-    fill(this.colors[state]);
-    ellipse(this.x, this.y, this.radius * 2);
+    push();
+    if (this.sprite) {
+      translate(this.x, this.y);
+      imageMode(CENTER);
+      if (this.velY < 0) {
+        rotate(-PI / 6);
+      } else if (this.velY < 10) {
+        rotate(-PI / 10);
+      } else if (this.velY > 20) {
+        rotate(PI / 3);
+      } else if (this.velY > 10) {
+        rotate(PI / 10);
+      }
+      image(this.sprite, 0, 0, this.radiusX * 2, this.radiusY * 2);
+    } else {
+      noStroke();
+      fill(this.colors[state]);
+      ellipse(this.x, this.y, this.radiusX * 2, this.radiusY * 2);
+    }
+    pop();
   }
 
   update() {
     this.velY += gravity;
-    this.velY = constrain(this.velY, -25, 25);
+    this.velY = constrain(this.velY, this.minVelY, this.maxVelY);
     this.y += this.velY;
     // this.x += this.velX;
   }
@@ -30,6 +52,6 @@ class Player {
   }
 
   colidedEarth() {
-    return this.y + this.radius >= canvasHeight;
+    return this.y + this.radiusY >= canvasHeight;
   }
 }
