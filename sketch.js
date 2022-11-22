@@ -77,12 +77,16 @@ function draw() {
 function keyPressed() {
   switch (key) {
     case " ":
-      if (state === "pending") {
-        state = "play";
-        player.show(state);
-        loop();
+      if (state === "failed") {
+        reset();
+      } else {
+        if (state === "pending") {
+          state = "play";
+          player.show(state);
+          loop();
+        }
+        player.flap();
       }
-      player.flap();
       break;
     case "r":
     case "R":
