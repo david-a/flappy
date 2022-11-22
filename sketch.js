@@ -9,7 +9,8 @@ const canvasHeight = 700;
 let player;
 let score;
 let pipePairs;
-let failed;
+let state = "pending"; // 'pending' | 'play' | 'failed'
+let starting;
 
 const maxPipes = (3 * canvasWidth) / (pipeWidth + horizontalGap);
 console.log("maxPipes", maxPipes);
@@ -24,22 +25,14 @@ function addPipePair() {
   }
 }
 
-function fail() {
-  failed = true;
-  noLoop();
-}
-
-function unfail() {
-  failed = false;
-  loop();
-}
-
 function reset() {
   player = new Player(100, canvasHeight / 2);
   score = new Score();
   pipePairs = [];
   addPipePair();
-  unfail();
+  state = "pending";
+  draw();
+  noLoop();
 }
 
 function setup() {
@@ -58,18 +51,24 @@ function draw() {
     pipePair.update();
     pipePair.show();
     if (pipePair.colided(player) || player.colidedEarth()) {
-      fail();
+      state = "failed";
+      noLoop();
     } else if (pipePair.justPassed(player)) {
       score.scoreUp();
     }
   });
-  player.show();
+  player.show(state);
   score.show();
 }
 
 function keyPressed() {
   switch (key) {
     case " ":
+      if (state === "pending") {
+        state = "play";
+        player.show(state);
+        loop();
+      }
       player.flap();
       break;
     case "r":

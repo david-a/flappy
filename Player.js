@@ -5,11 +5,16 @@ class Player {
     this.velY = 0;
     this.velX = panSpeed;
     this.radius = 25;
+    this.colors = {
+      play: [255, 255, 0],
+      failed: [255, 0, 0],
+      pending: [255, 165, 0],
+    };
   }
 
-  show() {
+  show(state = "play") {
     noStroke();
-    fill(255, 255, 0);
+    fill(this.colors[state]);
     ellipse(this.x, this.y, this.radius * 2);
   }
 
