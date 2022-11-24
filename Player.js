@@ -9,6 +9,7 @@ class Player {
     this.maxVelY = 25;
     this.radiusX = radiusX;
     this.radiusY = radiusY;
+    this.score = 0;
 
     this.colors = {
       play: [255, 255, 0],
@@ -53,5 +54,27 @@ class Player {
 
   colidedEarth() {
     return this.y + this.radiusY >= canvasHeight;
+  }
+
+  colidedPipePair(pipePair) {
+    return pipePair.bottomPipe.colided(this) || pipePair.topPipe.colided(this);
+  }
+
+  justPassedPipePair(pipePair) {
+    const backOfPlayer = this.x - this.radiusX;
+    const normalizedBackOfPlayer = backOfPlayer - (backOfPlayer % panSpeed);
+
+    return (
+      normalizedBackOfPlayer ===
+      pipePair.bottomPipe.x + pipePair.bottomPipe.width + panSpeed
+    );
+  }
+
+  incrementScore() {
+    this.score++;
+  }
+
+  resetScore() {
+    this.score = 0;
   }
 }

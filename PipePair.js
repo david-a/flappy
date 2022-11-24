@@ -19,20 +19,6 @@ class PipePair {
     this.topPipe.update();
   }
 
-  colided(plyr) {
-    return this.bottomPipe.colided(plyr) || this.topPipe.colided(plyr);
-  }
-
-  justPassed(plyr) {
-    const backOfPlayer = plyr.x - plyr.radiusX;
-    const normalizedBackOfPlayer = backOfPlayer - (backOfPlayer % panSpeed);
-
-    return (
-      normalizedBackOfPlayer ===
-      this.bottomPipe.x + this.bottomPipe.width + panSpeed
-    );
-  }
-
   offScreen() {
     if (this.bottomPipe.x + this.bottomPipe.width < 0) {
       return true;

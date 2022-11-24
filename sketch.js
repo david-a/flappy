@@ -36,7 +36,6 @@ function reset() {
     birdSpriteRadiusY,
     birdSprite
   );
-  score = new Score();
   pipePairs = [];
   addPipePair();
   state = "pending";
@@ -60,18 +59,23 @@ function draw() {
     addPipePair();
   }
   player.update();
-  pipePairs.forEach((pipePair) => {
-    pipePair.update();
-    pipePair.show();
-    if (pipePair.colided(player) || player.colidedEarth()) {
-      state = "failed";
-      noLoop();
-    } else if (pipePair.justPassed(player)) {
-      score.scoreUp();
-    }
-  });
+  if (player.colidedEarth()) {
+    state = "failed";
+    noLoop();
+  } else {
+    pipePairs.forEach((pipePair) => {
+      pipePair.update();
+      pipePair.show();
+      if (player.colidedPipePair(pipePair)) {
+        state = "failed";
+        noLoop();
+      } else if (player.justPassedPipePair(pipePair)) {
+        player.incrementScore();
+      }
+    });
+  }
   player.show(state);
-  score.show();
+  showScore(player.score);
 }
 
 function keyPressed() {
@@ -93,4 +97,16 @@ function keyPressed() {
       reset();
       break;
   }
+}
+
+function showScore(score) {
+  const x = 30;
+  const y = 30;
+  const size = 32;
+  const color = [255, 255, 0];
+  push();
+  textSize(size);
+  fill(color);
+  text(score, x, y);
+  pop();
 }
